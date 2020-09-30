@@ -4,15 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Injector {
     private static final Map<String, Injector> injectors = new HashMap<>();
-
-    private Map<Class, Object> instanceOfClasses = new HashMap<>();
-    private List<Class> classes = new ArrayList<>();
+    private final Map<Class<?>, Object> instanceOfClasses = new HashMap<>();
+    private final List<Class<?>> classes = new ArrayList<>();
 
     private Injector(String mainPackageName) {
         try {
@@ -31,14 +33,15 @@ public class Injector {
         return injector;
     }
 
-    public Object getInstance(Class certainInterface) {
+    public Object getInstance(Class<?> certainInterface) {
         Object newInstanceOfClass = null;
-        Class clazz = findClassExtendingInterface(certainInterface);
+        Class<?> clazz = findClassExtendingInterface(certainInterface);
+        Object instanceOfCurrentClass = createInstance(clazz);
         Field[] declaredFields = clazz.getDeclaredFields();
-        if (declaredFields.length == 0) {
-            return getNewInstance(clazz);
-        }
         for (Field field : declaredFields) {
+            if (isFieldInitialized(field, instanceOfCurrentClass)) {
+                continue;
+            }
             if (field.getDeclaredAnnotation(Inject.class) != null) {
                 Object classToInject = getInstance(field.getType());
                 newInstanceOfClass = getNewInstance(clazz);
@@ -48,47 +51,55 @@ public class Injector {
                         + clazz.getName() + " hasn't annotation Inject");
             }
         }
-
+        if (newInstanceOfClass == null) {
+            return getNewInstance(clazz);
+        }
         return newInstanceOfClass;
     }
 
     private Class<?> findClassExtendingInterface(Class<?> certainInterface) {
-        Class<?> correctClass = null;
         for (Class<?> clazz : classes) {
             Class<?>[] interfaces = clazz.getInterfaces();
             for (Class<?> singleInterface : interfaces) {
                 if (singleInterface.equals(certainInterface)
                         && (clazz.isAnnotationPresent(Service.class)
                         || clazz.isAnnotationPresent(Dao.class))) {
-                    if (correctClass == null) {
-                        correctClass = clazz;
-                    } else {
-                        throw new RuntimeException("Two or more classes that implement interface "
-                                + certainInterface.getName() + " has annotation Dao or Service)");
-                    }
+                    return clazz;
                 }
             }
         }
-        if (correctClass != null) {
-            return correctClass;
-        }
-        throw new RuntimeException("Can't find class which implemented "
-                + certainInterface.getName() + " interface with valid annotation (Dao or Service)");
+        throw new RuntimeException("Can't find class which implements "
+                + certainInterface.getName()
+                + " interface and has valid annotation (Dao or Service)");
     }
 
-    private Object getNewInstance(Class certainClass) {
+    private Object getNewInstance(Class<?> certainClass) {
         if (instanceOfClasses.containsKey(certainClass)) {
             return instanceOfClasses.get(certainClass);
         }
+        Object newInstance = createInstance(certainClass);
+        instanceOfClasses.put(certainClass, newInstance);
+        return newInstance;
+    }
+
+    private boolean isFieldInitialized(Field field, Object instance) {
+        field.setAccessible(true);
         try {
-            Constructor<?> constructorDao = certainClass.getConstructor();
-            Object newInstance = constructorDao.newInstance();
-            instanceOfClasses.put(certainClass, newInstance);
-            return newInstance;
-        } catch (IllegalAccessException | InstantiationException
-                | InvocationTargetException | NoSuchMethodException e) {
+            return field.get(instance) != null;
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Can't get access to field");
+        }
+    }
+
+    private Object createInstance(Class<?> clazz) {
+        Object newInstance;
+        try {
+            Constructor<?> classConstructor = clazz.getConstructor();
+            newInstance = classConstructor.newInstance();
+        } catch (Exception e) {
             throw new RuntimeException("Can't create object of the class", e);
         }
+        return newInstance;
     }
 
     private void setValueToField(Field field, Object instanceOfClass, Object classToInject) {
@@ -99,7 +110,6 @@ public class Injector {
             throw new RuntimeException("Can't set value to field ", e);
         }
     }
-
     /**
      * Scans all classes accessible from the context class loader which
      * belong to the given package and subpackages.
@@ -109,7 +119,8 @@ public class Injector {
      * @throws ClassNotFoundException if the class cannot be located
      * @throws IOException            if I/O errors occur
      */
-    private static List<Class> getClasses(String packageName)
+
+    private static List<Class<?>> getClasses(String packageName)
             throws IOException, ClassNotFoundException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         if (classLoader == null) {
@@ -122,13 +133,12 @@ public class Injector {
             URL resource = resources.nextElement();
             dirs.add(new File(resource.getFile()));
         }
-        ArrayList<Class> classes = new ArrayList<>();
+        ArrayList<Class<?>> classes = new ArrayList<>();
         for (File directory : dirs) {
             classes.addAll(findClasses(directory, packageName));
         }
         return classes;
     }
-
     /**
      * Recursive method used to find all classes in a given directory and subdirs.
      *
@@ -137,9 +147,10 @@ public class Injector {
      * @return The classes
      * @throws ClassNotFoundException if the class cannot be located
      */
-    private static List<Class> findClasses(File directory, String packageName)
+
+    private static List<Class<?>> findClasses(File directory, String packageName)
             throws ClassNotFoundException {
-        List<Class> classes = new ArrayList<>();
+        List<Class<?>> classes = new ArrayList<>();
         if (!directory.exists()) {
             return classes;
         }
