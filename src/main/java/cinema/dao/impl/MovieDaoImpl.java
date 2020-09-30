@@ -1,6 +1,7 @@
 package cinema.dao.impl;
 
 import cinema.dao.MovieDao;
+import cinema.exception.DataProcessingException;
 import cinema.lib.Dao;
 import cinema.model.Movie;
 import cinema.util.HibernateUtil;
@@ -24,7 +25,7 @@ public class MovieDaoImpl implements MovieDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Couldn't insert movie", e);
+            throw new DataProcessingException("Couldn't insert movie", e);
         }
     }
 
