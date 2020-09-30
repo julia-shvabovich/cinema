@@ -34,6 +34,5 @@ public class MovieDaoImpl implements MovieDao {
             Query<Movie> movies = session.createQuery("from Movie", Movie.class);
             return movies.getResultList();
         }
-
     }
 }
