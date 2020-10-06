@@ -19,7 +19,7 @@ public class Main {
         Movie movie = new Movie();
         movie.setTitle("Fast and Furious");
         movie.setDescription("I never heard of the film");
-        movie = movieService.add(movie);
+        movieService.add(movie);
         movieService.getAll().forEach(System.out::println);
 
         CinemaHall testHall = new CinemaHall();
