@@ -46,8 +46,8 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             LocalDateTime start = date.atStartOfDay();
             LocalDateTime end = date.atTime(LocalTime.MAX);
             movies.setParameter("movieId", movieId);
-            movies.setParameter("start", start);
-            movies.setParameter("end", end);
+            movies.setParameter("start", date.atStartOfDay());
+            movies.setParameter("end", date.atTime(LocalTime.MAX));
             return movies.getResultList();
         } catch (Exception e) {
             throw new DataProcessingException("Couldn't get movie sessions by date of "
