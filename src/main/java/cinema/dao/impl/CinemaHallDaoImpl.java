@@ -19,14 +19,14 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            Long id = (Long) session.save(cinemaHall);
+            session.save(cinemaHall);
             transaction.commit();
             return cinemaHall;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new DataProcessingException("Couldn't insert cinema hall", e);
+            throw new DataProcessingException("Couldn't insert cinema hall " + cinemaHall, e);
         } finally {
             if (session != null) {
                 session.close();
@@ -39,8 +39,6 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<CinemaHall> halls = session.createQuery("from CinemaHall", CinemaHall.class);
             return halls.getResultList();
-        } catch (Exception e) {
-            throw new DataProcessingException("Couldn't get cinema halls", e);
         }
     }
 }
