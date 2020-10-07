@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class Main {
     private static Injector injector = Injector.getInstance("cinema");
 
-    public static void main(String[] args) throws AuthenticationException {
+    public static void main(String[] args) {
         MovieService movieService = (MovieService) injector.getInstance(MovieService.class);
         movieService.getAll().forEach(System.out::println);
         Movie movie = new Movie();
@@ -50,7 +50,11 @@ public class Main {
         testUser.setPassword("12345");
         System.out.println("Registered user: "
                 + authenticationService.register(testUser.getEmail(), testUser.getPassword()));
-        System.out.println("Logged user: "
-                + authenticationService.login(testUser.getEmail(), testUser.getPassword()));
+        try {
+            System.out.println("Logged user: "
+                    + authenticationService.login(testUser.getEmail(), testUser.getPassword()));
+        } catch (AuthenticationException e) {
+            System.out.println("AuthenticationException occured " + e);
+        }
     }
 }
