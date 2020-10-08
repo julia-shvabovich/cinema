@@ -19,14 +19,14 @@ public class MovieDaoImpl implements MovieDao {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            Long id = (Long) session.save(movie);
+            session.persist(movie);
             transaction.commit();
             return movie;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new DataProcessingException("Couldn't insert movie", e);
+            throw new DataProcessingException("Couldn't insert movie " + movie, e);
         } finally {
             if (session != null) {
                 session.close();

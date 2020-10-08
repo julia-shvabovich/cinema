@@ -1,32 +1,32 @@
 package cinema.dao.impl;
 
-import cinema.dao.CinemaHallDao;
+import cinema.dao.UserDao;
 import cinema.exception.DataProcessingException;
 import cinema.lib.Dao;
-import cinema.model.CinemaHall;
+import cinema.model.User;
 import cinema.util.HibernateUtil;
-import java.util.List;
+import java.util.Optional;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 @Dao
-public class CinemaHallDaoImpl implements CinemaHallDao {
+public class UserDaoImpl implements UserDao {
     @Override
-    public CinemaHall add(CinemaHall cinemaHall) {
+    public User add(User user) {
         Transaction transaction = null;
         Session session = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            session.persist(cinemaHall);
+            session.persist(user);
             transaction.commit();
-            return cinemaHall;
+            return user;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new DataProcessingException("Couldn't insert cinema hall " + cinemaHall, e);
+            throw new DataProcessingException("Couldn't insert user " + user, e);
         } finally {
             if (session != null) {
                 session.close();
@@ -35,10 +35,12 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
     }
 
     @Override
-    public List<CinemaHall> getAll() {
+    public Optional<User> findByEmail(String email) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Query<CinemaHall> halls = session.createQuery("from CinemaHall", CinemaHall.class);
-            return halls.getResultList();
+            Query<User> users =
+                    session.createQuery("FROM User WHERE email = :email", User.class);
+            users.setParameter("email", email);
+            return users.uniqueResultOptional();
         }
     }
 }
