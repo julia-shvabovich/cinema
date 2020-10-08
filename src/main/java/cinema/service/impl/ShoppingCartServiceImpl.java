@@ -10,8 +10,6 @@ import cinema.model.Ticket;
 import cinema.model.User;
 import cinema.service.ShoppingCartService;
 
-import java.util.ArrayList;
-
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Inject
