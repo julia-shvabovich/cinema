@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "movie_session")
+@Table(name = "movie_sessions")
 public class MovieSession {
     @Id
     @Column(name = "session_id")
