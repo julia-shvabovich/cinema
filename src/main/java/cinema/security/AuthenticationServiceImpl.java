@@ -30,7 +30,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return userService.add(user);
     }
 
-    private boolean isValid(String password, User user) {
+    private boolean isPasswordValid(String password, User user) {
         byte[] salt = user.getSalt();
         return HashUtil.hashPassword(password, salt).equals(user.getPassword());
     }
