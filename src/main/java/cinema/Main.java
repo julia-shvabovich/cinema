@@ -11,6 +11,7 @@ import cinema.security.AuthenticationService;
 import cinema.service.CinemaHallService;
 import cinema.service.MovieService;
 import cinema.service.MovieSessionService;
+import cinema.service.OrderService;
 import cinema.service.ShoppingCartService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -65,5 +66,11 @@ public class Main {
         ShoppingCart cart = shoppingCartService.getByUser(testUser);
         System.out.println("Shopping cart of the user is " + cart);
         shoppingCartService.clear(cart);
+
+        OrderService orderService
+                = (OrderService) injector.getInstance(OrderService.class);
+        cart = shoppingCartService.getByUser(testUser);
+        orderService.completeOrder(cart.getTickets(), testUser);
+        orderService.getOrderHistory(testUser).forEach(System.out::println);
     }
 }
