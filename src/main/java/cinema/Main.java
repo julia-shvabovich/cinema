@@ -5,11 +5,13 @@ import cinema.lib.Injector;
 import cinema.model.CinemaHall;
 import cinema.model.Movie;
 import cinema.model.MovieSession;
+import cinema.model.ShoppingCart;
 import cinema.model.User;
 import cinema.security.AuthenticationService;
 import cinema.service.CinemaHallService;
 import cinema.service.MovieService;
 import cinema.service.MovieSessionService;
+import cinema.service.ShoppingCartService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -48,13 +50,20 @@ public class Main {
         User testUser = new User();
         testUser.setEmail("shvabovichjulia@gmail.com");
         testUser.setPassword("12345");
-        System.out.println("Registered user: "
-                + authenticationService.register(testUser.getEmail(), testUser.getPassword()));
+        testUser = authenticationService.register(testUser.getEmail(), testUser.getPassword());
+        System.out.println("Registered user: " + testUser);
         try {
-            System.out.println("Logged user: "
-                    + authenticationService.login(testUser.getEmail(), testUser.getPassword()));
+            testUser = authenticationService.login(testUser.getEmail(), testUser.getPassword());
+            System.out.println("Logged user: " + testUser);
         } catch (AuthenticationException e) {
             System.out.println("AuthenticationException occured " + e);
         }
+
+        ShoppingCartService shoppingCartService
+                = (ShoppingCartService) injector.getInstance(ShoppingCartService.class);
+        shoppingCartService.addSession(movieSession, testUser);
+        ShoppingCart cart = shoppingCartService.getByUser(testUser);
+        System.out.println("Shopping cart of the user is " + cart);
+        shoppingCartService.clear(cart);
     }
 }
