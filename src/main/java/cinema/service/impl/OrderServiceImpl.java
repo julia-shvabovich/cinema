@@ -11,9 +11,11 @@ import cinema.service.ShoppingCartService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+    private static final Logger LOGGER = Logger.getLogger(OrderServiceImpl.class);
     @Inject
     private OrderDao orderDao;
     @Inject
@@ -26,6 +28,7 @@ public class OrderServiceImpl implements OrderService {
         order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
         shoppingCartService.clear(shoppingCartService.getByUser(user));
+        LOGGER.info("Completed order: " + order);
         return orderDao.add(order);
     }
 

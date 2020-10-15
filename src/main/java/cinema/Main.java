@@ -15,18 +15,19 @@ import cinema.service.OrderService;
 import cinema.service.ShoppingCartService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import org.apache.log4j.Logger;
 
 public class Main {
+    private static final Logger LOGGER = Logger.getLogger(Main.class);
     private static Injector injector = Injector.getInstance("cinema");
 
     public static void main(String[] args) {
         MovieService movieService = (MovieService) injector.getInstance(MovieService.class);
-        movieService.getAll().forEach(System.out::println);
         Movie movie = new Movie();
         movie.setTitle("Fast and Furious");
         movie.setDescription("I never heard of the film");
         movieService.add(movie);
-        movieService.getAll().forEach(System.out::println);
+        movieService.getAll().forEach(LOGGER::debug);
 
         CinemaHall testHall = new CinemaHall();
         testHall.setCapacity(20);
@@ -34,7 +35,7 @@ public class Main {
         CinemaHallService cinemaHallService =
                 (CinemaHallService) injector.getInstance(CinemaHallService.class);
         cinemaHallService.add(testHall);
-        cinemaHallService.getAll().forEach(System.out::println);
+        cinemaHallService.getAll().forEach(LOGGER::debug);
 
         MovieSession movieSession = new MovieSession();
         movieSession.setCinemaHall(testHall);
@@ -44,7 +45,7 @@ public class Main {
                 (MovieSessionService) injector.getInstance(MovieSessionService.class);
         movieSessionService.add(movieSession);
         movieSessionService.findAvailableSessions(movie.getId(),
-                LocalDate.now()).forEach(System.out::println);
+                LocalDate.now()).forEach(LOGGER::debug);
 
         AuthenticationService authenticationService =
                 (AuthenticationService) injector.getInstance(AuthenticationService.class);
@@ -52,25 +53,24 @@ public class Main {
         testUser.setEmail("shvabovichjulia@gmail.com");
         testUser.setPassword("12345");
         testUser = authenticationService.register(testUser.getEmail(), testUser.getPassword());
-        System.out.println("Registered user: " + testUser);
         try {
             testUser = authenticationService.login(testUser.getEmail(), testUser.getPassword());
-            System.out.println("Logged user: " + testUser);
+            LOGGER.debug("Logged user: " + testUser);
         } catch (AuthenticationException e) {
-            System.out.println("AuthenticationException occured " + e);
+            LOGGER.error("AuthenticationException occured " + e);
         }
 
         ShoppingCartService shoppingCartService
                 = (ShoppingCartService) injector.getInstance(ShoppingCartService.class);
         shoppingCartService.addSession(movieSession, testUser);
         ShoppingCart cart = shoppingCartService.getByUser(testUser);
-        System.out.println("Shopping cart of the user is " + cart);
+        LOGGER.debug("Shopping cart of the user is " + cart);
         shoppingCartService.clear(cart);
 
         OrderService orderService
                 = (OrderService) injector.getInstance(OrderService.class);
         cart = shoppingCartService.getByUser(testUser);
         orderService.completeOrder(cart.getTickets(), testUser);
-        orderService.getOrderHistory(testUser).forEach(System.out::println);
+        orderService.getOrderHistory(testUser).forEach(LOGGER::debug);
     }
 }
