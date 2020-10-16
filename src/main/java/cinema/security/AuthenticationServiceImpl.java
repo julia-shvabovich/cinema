@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private static final Logger LOGGER = Logger.getLogger(AuthenticationServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(AuthenticationServiceImpl.class);
     @Inject
     private UserService userService;
     @Inject
@@ -34,7 +34,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setPassword(password);
         userService.add(user);
         shoppingCartService.registerNewShoppingCart(user);
-        LOGGER.info("New registered user: " + user);
+        logger.info("New registered user: " + user);
         return user;
     }
 
