@@ -27,7 +27,7 @@ public class Main {
         movie.setTitle("Fast and Furious");
         movie.setDescription("I never heard of the film");
         movieService.add(movie);
-        movieService.getAll().forEach(LOGGER::debug);
+        movieService.getAll().forEach(logger::info);
 
         CinemaHall testHall = new CinemaHall();
         testHall.setCapacity(20);
@@ -35,7 +35,7 @@ public class Main {
         CinemaHallService cinemaHallService =
                 (CinemaHallService) injector.getInstance(CinemaHallService.class);
         cinemaHallService.add(testHall);
-        cinemaHallService.getAll().forEach(LOGGER::debug);
+        cinemaHallService.getAll().forEach(logger::info);
 
         MovieSession movieSession = new MovieSession();
         movieSession.setCinemaHall(testHall);
@@ -45,7 +45,7 @@ public class Main {
                 (MovieSessionService) injector.getInstance(MovieSessionService.class);
         movieSessionService.add(movieSession);
         movieSessionService.findAvailableSessions(movie.getId(),
-                LocalDate.now()).forEach(LOGGER::debug);
+                LocalDate.now()).forEach(logger::info);
 
         AuthenticationService authenticationService =
                 (AuthenticationService) injector.getInstance(AuthenticationService.class);
@@ -55,22 +55,22 @@ public class Main {
         testUser = authenticationService.register(testUser.getEmail(), testUser.getPassword());
         try {
             testUser = authenticationService.login(testUser.getEmail(), testUser.getPassword());
-            LOGGER.debug("Logged user: " + testUser);
+            logger.info("Logged user: " + testUser);
         } catch (AuthenticationException e) {
-            LOGGER.error("AuthenticationException occured " + e);
+            logger.error("AuthenticationException occured " + e);
         }
 
         ShoppingCartService shoppingCartService
                 = (ShoppingCartService) injector.getInstance(ShoppingCartService.class);
         shoppingCartService.addSession(movieSession, testUser);
         ShoppingCart cart = shoppingCartService.getByUser(testUser);
-        LOGGER.debug("Shopping cart of the user is " + cart);
+        logger.info("Shopping cart of the user is " + cart);
         shoppingCartService.clear(cart);
 
         OrderService orderService
                 = (OrderService) injector.getInstance(OrderService.class);
         cart = shoppingCartService.getByUser(testUser);
         orderService.completeOrder(cart.getTickets(), testUser);
-        orderService.getOrderHistory(testUser).forEach(LOGGER::debug);
+        orderService.getOrderHistory(testUser).forEach(logger::info);
     }
 }
