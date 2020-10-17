@@ -6,15 +6,19 @@ import cinema.lib.Dao;
 import cinema.model.ShoppingCart;
 import cinema.model.User;
 import cinema.util.HibernateUtil;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Dao
 public class ShoppingCartDaoImpl implements ShoppingCartDao {
+    private static final Logger logger = Logger.getLogger(ShoppingCartDaoImpl.class);
+
     @Override
     public ShoppingCart add(ShoppingCart shoppingCart) {
         Transaction transaction = null;
         Session session = null;
+        logger.warn("A try to add shopping cart " + shoppingCart);
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();

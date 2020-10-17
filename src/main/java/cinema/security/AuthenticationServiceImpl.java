@@ -8,11 +8,9 @@ import cinema.service.ShoppingCartService;
 import cinema.service.UserService;
 import cinema.util.HashUtil;
 import java.util.Optional;
-import org.apache.log4j.Logger;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private static final Logger logger = Logger.getLogger(AuthenticationServiceImpl.class);
     @Inject
     private UserService userService;
     @Inject
@@ -34,7 +32,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setPassword(password);
         userService.add(user);
         shoppingCartService.registerNewShoppingCart(user);
-        logger.info("New registered user: " + user);
         return user;
     }
 
