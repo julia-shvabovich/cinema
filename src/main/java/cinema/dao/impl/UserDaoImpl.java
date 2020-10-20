@@ -6,16 +6,20 @@ import cinema.lib.Dao;
 import cinema.model.User;
 import cinema.util.HibernateUtil;
 import java.util.Optional;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 @Dao
 public class UserDaoImpl implements UserDao {
+    private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
+
     @Override
     public User add(User user) {
         Transaction transaction = null;
         Session session = null;
+        logger.warn("A try to add user " + user);
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
