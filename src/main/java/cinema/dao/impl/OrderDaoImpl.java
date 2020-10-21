@@ -2,19 +2,24 @@ package cinema.dao.impl;
 
 import cinema.dao.OrderDao;
 import cinema.exception.DataProcessingException;
-import cinema.lib.Dao;
 import cinema.model.Order;
 import cinema.model.User;
-import cinema.util.HibernateUtil;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
-@Dao
+@Repository
 public class OrderDaoImpl implements OrderDao {
     private static final Logger logger = Logger.getLogger(OrderDaoImpl.class);
+    private final SessionFactory sessionFactory;
+
+    public OrderDaoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public Order add(Order order) {
@@ -22,7 +27,7 @@ public class OrderDaoImpl implements OrderDao {
         Session session = null;
         logger.warn("A try to add order " + order);
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             transaction = session.beginTransaction();
             session.save(order);
             transaction.commit();
@@ -41,7 +46,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Order> getOrdersByUser(User user) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Query<Order> orders = session.createQuery("SELECT DISTINCT o FROM Order o "
                     + "LEFT JOIN FETCH o.tickets "
                     + "WHERE o.user = :user", Order.class);
