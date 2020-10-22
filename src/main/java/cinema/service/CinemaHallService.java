@@ -7,4 +7,7 @@ public interface CinemaHallService {
     CinemaHall add(CinemaHall cinemaHall);
 
     List<CinemaHall> getAll();
+
+    CinemaHall get(Long id);
+
 }
