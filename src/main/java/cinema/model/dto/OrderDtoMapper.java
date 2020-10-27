@@ -3,6 +3,8 @@ package cinema.model.dto;
 import cinema.model.Order;
 import cinema.service.OrderService;
 import cinema.service.UserService;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,7 +18,11 @@ public class OrderDtoMapper {
     public OrderResponseDto mapToDto(Order order) {
         OrderResponseDto orderResponseDto = new OrderResponseDto();
         orderResponseDto.setId(order.getId());
-        orderResponseDto.setTickets(order.getTickets());
+        List<TicketResponseDto> tickets = order.getTickets().stream()
+                .map(ticket -> new TicketResponseDto(ticket.getId(),
+                        ticket.getMovieSession().getMovie().getTitle()))
+                .collect(Collectors.toList());
+        orderResponseDto.setTickets(tickets);
         orderResponseDto.setOrderDate(order.getOrderDate());
         orderResponseDto.setUserId(order.getUser().getId());
         return orderResponseDto;

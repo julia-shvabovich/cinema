@@ -1,7 +1,6 @@
 package cinema.controller;
 
 import cinema.model.ShoppingCart;
-import cinema.model.User;
 import cinema.model.dto.OrderDtoMapper;
 import cinema.model.dto.OrderResponseDto;
 import cinema.service.OrderService;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/orders")
@@ -39,8 +39,8 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<OrderResponseDto> getOrdersHistory(User user) {
-        return orderService.getOrderHistory(user).stream()
+    public List<OrderResponseDto> getOrdersHistory(@RequestParam String email) {
+        return orderService.getOrderHistory(userService.findByEmail(email).get()).stream()
                 .map(orderDtoMapper::mapToDto)
                 .collect(Collectors.toList());
     }

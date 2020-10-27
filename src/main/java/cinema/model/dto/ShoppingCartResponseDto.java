@@ -1,11 +1,10 @@
 package cinema.model.dto;
 
-import cinema.model.Ticket;
 import java.util.List;
 
 public class ShoppingCartResponseDto {
     private Long id;
-    private List<Ticket> tickets;
+    private List<TicketResponseDto> tickets;
     private String userEmail;
 
     public Long getId() {
@@ -16,11 +15,11 @@ public class ShoppingCartResponseDto {
         this.id = id;
     }
 
-    public List<Ticket> getTickets() {
+    public List<TicketResponseDto> getTickets() {
         return tickets;
     }
 
-    public void setTickets(List<Ticket> tickets) {
+    public void setTickets(List<TicketResponseDto> tickets) {
         this.tickets = tickets;
     }
 
