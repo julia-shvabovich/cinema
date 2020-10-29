@@ -1,4 +1,4 @@
-package cinema.model.dto;
+package cinema.model.dto.movie;
 
 import cinema.model.Movie;
 import org.springframework.stereotype.Component;

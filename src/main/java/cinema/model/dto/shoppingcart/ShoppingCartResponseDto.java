@@ -1,4 +1,6 @@
-package cinema.model.dto;
+package cinema.model.dto.shoppingcart;
+
+import cinema.model.dto.ticket.TicketResponseDto;
 
 import java.util.List;
 

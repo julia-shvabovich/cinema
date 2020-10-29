@@ -1,4 +1,4 @@
-package cinema.model.dto;
+package cinema.model.dto.user;
 
 import cinema.model.User;
 import org.springframework.stereotype.Component;

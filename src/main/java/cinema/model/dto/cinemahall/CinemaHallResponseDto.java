@@ -1,8 +1,17 @@
-package cinema.model.dto;
+package cinema.model.dto.cinemahall;
 
-public class CinemaHallRequestDto {
+public class CinemaHallResponseDto {
+    private Long id;
     private int capacity;
     private String description;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public int getCapacity() {
         return capacity;

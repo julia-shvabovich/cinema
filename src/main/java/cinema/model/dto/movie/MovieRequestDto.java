@@ -1,17 +1,8 @@
-package cinema.model.dto;
+package cinema.model.dto.movie;
 
-public class MovieResponseDto {
-    private Long id;
+public class MovieRequestDto {
     private String title;
     private String description;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
