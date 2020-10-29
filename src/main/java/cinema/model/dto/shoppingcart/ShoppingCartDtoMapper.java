@@ -2,10 +2,9 @@
 package cinema.model.dto.shoppingcart;
 
 import cinema.model.ShoppingCart;
+import cinema.model.dto.ticket.TicketResponseDto;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import cinema.model.dto.ticket.TicketResponseDto;
 import org.springframework.stereotype.Component;
 
 @Component

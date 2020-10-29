@@ -1,7 +1,6 @@
 package cinema.model.dto.order;
 
 import cinema.model.dto.ticket.TicketResponseDto;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
