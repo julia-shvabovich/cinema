@@ -1,7 +1,6 @@
 package cinema;
 
 import cinema.config.AppConfig;
-import cinema.exception.AuthenticationException;
 import cinema.model.CinemaHall;
 import cinema.model.Movie;
 import cinema.model.MovieSession;
@@ -51,13 +50,6 @@ public class Main {
         User testUser = new User();
         testUser.setEmail("shvabovichjulia@gmail.com");
         testUser.setPassword("12345");
-        testUser = authenticationService.register(testUser.getEmail(), testUser.getPassword());
-        try {
-            testUser = authenticationService.login(testUser.getEmail(), testUser.getPassword());
-            logger.info("Logged user: " + testUser);
-        } catch (AuthenticationException e) {
-            logger.error("AuthenticationException occured " + e);
-        }
 
         ShoppingCartService shoppingCartService = context.getBean(ShoppingCartService.class);
         shoppingCartService.addSession(movieSession, testUser);

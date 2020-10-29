@@ -8,12 +8,11 @@ import cinema.service.ShoppingCartService;
 import cinema.service.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/orders")
@@ -32,15 +31,15 @@ public class OrderController {
     }
 
     @PostMapping("/complete")
-    public void completeOrder(@RequestBody String email) {
+    public void completeOrder(Authentication user) {
         ShoppingCart shoppingCart = shoppingCartService
-                .getByUser(userService.findByEmail(email).get());
+                .getByUser(userService.findUser(user).get());
         orderService.completeOrder(shoppingCart.getTickets(), shoppingCart.getUser());
     }
 
     @GetMapping
-    public List<OrderResponseDto> getOrdersHistory(@RequestParam String email) {
-        return orderService.getOrderHistory(userService.findByEmail(email).get()).stream()
+    public List<OrderResponseDto> getOrdersHistory(Authentication user) {
+        return orderService.getOrderHistory(userService.findUser(user).get()).stream()
                 .map(orderDtoMapper::mapToDto)
                 .collect(Collectors.toList());
     }
