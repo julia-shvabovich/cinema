@@ -1,10 +1,10 @@
 package cinema.controller;
 
 import cinema.model.ShoppingCart;
-import cinema.model.dto.MovieSessionDtoMapper;
-import cinema.model.dto.MovieSessionRequestDto;
-import cinema.model.dto.ShoppingCartDtoMapper;
-import cinema.model.dto.ShoppingCartResponseDto;
+import cinema.model.dto.moviesession.MovieSessionDtoMapper;
+import cinema.model.dto.moviesession.MovieSessionRequestDto;
+import cinema.model.dto.shoppingcart.ShoppingCartDtoMapper;
+import cinema.model.dto.shoppingcart.ShoppingCartResponseDto;
 import cinema.service.ShoppingCartService;
 import cinema.service.UserService;
 import org.springframework.stereotype.Controller;

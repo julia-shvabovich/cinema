@@ -1,8 +1,8 @@
 package cinema.controller;
 
-import cinema.model.dto.CinemaHallDtoMapper;
-import cinema.model.dto.CinemaHallRequestDto;
-import cinema.model.dto.CinemaHallResponseDto;
+import cinema.model.dto.cinemahall.CinemaHallDtoMapper;
+import cinema.model.dto.cinemahall.CinemaHallRequestDto;
+import cinema.model.dto.cinemahall.CinemaHallResponseDto;
 import cinema.service.CinemaHallService;
 import java.util.List;
 import java.util.stream.Collectors;

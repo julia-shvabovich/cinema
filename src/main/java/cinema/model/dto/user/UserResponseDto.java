@@ -1,4 +1,4 @@
-package cinema.model.dto;
+package cinema.model.dto.user;
 
 public class UserResponseDto {
     private Long id;

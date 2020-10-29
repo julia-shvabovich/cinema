@@ -1,6 +1,7 @@
-package cinema.model.dto;
+package cinema.model.dto.order;
 
 import cinema.model.Order;
+import cinema.model.dto.ticket.TicketResponseDto;
 import cinema.service.OrderService;
 import cinema.service.UserService;
 import java.util.List;

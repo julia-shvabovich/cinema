@@ -1,8 +1,8 @@
 package cinema.controller;
 
 import cinema.model.User;
-import cinema.model.dto.UserDtoMapper;
-import cinema.model.dto.UserResponseDto;
+import cinema.model.dto.user.UserDtoMapper;
+import cinema.model.dto.user.UserResponseDto;
 import cinema.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

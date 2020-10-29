@@ -1,4 +1,4 @@
-package cinema.model.dto;
+package cinema.model.dto.ticket;
 
 public class TicketResponseDto {
     private Long id;

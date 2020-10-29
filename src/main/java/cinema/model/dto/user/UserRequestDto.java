@@ -1,4 +1,4 @@
-package cinema.model.dto;
+package cinema.model.dto.user;
 
 public class UserRequestDto {
     private String email;

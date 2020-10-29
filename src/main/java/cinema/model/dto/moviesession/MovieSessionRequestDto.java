@@ -1,4 +1,4 @@
-package cinema.model.dto;
+package cinema.model.dto.moviesession;
 
 public class MovieSessionRequestDto {
     private Long movieId;
