@@ -4,8 +4,6 @@ import cinema.dao.UserDao;
 import cinema.model.User;
 import cinema.service.UserService;
 import java.util.Optional;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +26,5 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findByEmail(String email) {
         return userDao.findByEmail(email);
-    }
-
-    @Override
-    public Optional<User> findUser(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return userDao.findByEmail(userDetails.getUsername());
     }
 }
