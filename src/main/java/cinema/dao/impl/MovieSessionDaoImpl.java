@@ -6,6 +6,7 @@ import cinema.model.MovieSession;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -56,6 +57,13 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             movies.setParameter("start", date.atStartOfDay());
             movies.setParameter("end", date.atTime(LocalTime.MAX));
             return movies.getResultList();
+        }
+    }
+
+    @Override
+    public Optional<MovieSession> findById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            return Optional.of(session.get(MovieSession.class, id));
         }
     }
 }
