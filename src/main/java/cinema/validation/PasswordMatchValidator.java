@@ -9,6 +9,6 @@ public class PasswordMatchValidator
     public boolean isValid(UserRequestDto value, ConstraintValidatorContext context) {
         String password = value.getPassword();
         String passwordRepeated = value.getPasswordRepeated();
-        return password != null && password.equals(passwordRepeated);
+        return password.equals(passwordRepeated);
     }
 }

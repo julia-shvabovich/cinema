@@ -3,10 +3,10 @@ package cinema.controller;
 import cinema.model.dto.user.UserDtoMapper;
 import cinema.model.dto.user.UserResponseDto;
 import cinema.service.UserService;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/users")
@@ -20,7 +20,7 @@ public class UserController {
     }
 
     @GetMapping("/by-email")
-    public UserResponseDto getByEmail(Authentication user) {
-        return userDtoMapper.mapToDto(userService.findUser(user).get());
+    public UserResponseDto getByEmail(@RequestParam String email) {
+        return userDtoMapper.mapToDto(userService.findByEmail(email).get());
     }
 }
