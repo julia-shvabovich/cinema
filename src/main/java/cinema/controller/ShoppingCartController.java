@@ -38,7 +38,7 @@ public class ShoppingCartController {
                                 @RequestParam Long movieSessionId) {
         UserDetails details = (UserDetails) authentication.getPrincipal();
         User user = userService.findByEmail(details.getUsername()).get();
-        shoppingCartService.addSession(movieSessionService.findById(movieSessionId).get(), user);
+        shoppingCartService.addSession(movieSessionService.findById(movieSessionId), user);
     }
 
     @GetMapping("/by-user")
