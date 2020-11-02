@@ -3,7 +3,6 @@ package cinema.model.dto.cinemahall;
 import javax.validation.constraints.Min;
 
 public class CinemaHallRequestDto {
-    @Min(5)
     private int capacity;
     private String description;
 

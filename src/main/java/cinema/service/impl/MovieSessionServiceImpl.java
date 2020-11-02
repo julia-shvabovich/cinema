@@ -27,7 +27,7 @@ public class MovieSessionServiceImpl implements MovieSessionService {
     }
 
     @Override
-    public Optional<MovieSession> findById(Long id) {
+    public MovieSession findById(Long id) {
         return movieSessionDao.findById(id);
     }
 }

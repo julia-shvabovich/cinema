@@ -10,5 +10,5 @@ public interface MovieSessionService {
 
     MovieSession add(MovieSession session);
 
-    Optional<MovieSession> findById(Long id);
+    MovieSession findById(Long id);
 }
