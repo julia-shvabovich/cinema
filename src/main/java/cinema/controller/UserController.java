@@ -3,6 +3,7 @@ package cinema.controller;
 import cinema.model.dto.user.UserDtoMapper;
 import cinema.model.dto.user.UserResponseDto;
 import cinema.service.UserService;
+import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping("/by-email")
-    public UserResponseDto getByEmail(@RequestParam String email) {
+    public UserResponseDto getByEmail(@RequestParam @Valid String email) {
         return userDtoMapper.mapToDto(userService.findByEmail(email).get());
     }
 }
