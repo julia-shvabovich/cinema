@@ -25,7 +25,7 @@ public class OrderDtoMapper {
                 .collect(Collectors.toList());
         orderResponseDto.setTickets(tickets);
         orderResponseDto.setOrderDate(order.getOrderDate());
-        orderResponseDto.setUserId(order.getUser().getId());
+        orderResponseDto.setUserEmail(order.getUser().getEmail());
         return orderResponseDto;
     }
 }
