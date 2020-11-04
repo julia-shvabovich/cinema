@@ -1,9 +1,8 @@
 package cinema.dao.impl;
 
-import cinema.dao.UserDao;
+import cinema.dao.RoleDao;
 import cinema.exception.DataProcessingException;
-import cinema.model.User;
-import java.util.Optional;
+import cinema.model.Role;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,30 +11,30 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserDaoImpl implements UserDao {
-    private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
+public class RoleDaoImpl implements RoleDao {
+    private static final Logger logger = Logger.getLogger(RoleDaoImpl.class);
     private final SessionFactory sessionFactory;
 
-    public UserDaoImpl(SessionFactory sessionFactory) {
+    public RoleDaoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
     @Override
-    public User add(User user) {
+    public Role add(Role role) {
         Transaction transaction = null;
         Session session = null;
-        logger.warn("A try to add user " + user);
+        logger.warn("A try to add role " + role);
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            session.save(user);
+            session.save(role);
             transaction.commit();
-            return user;
+            return role;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new DataProcessingException("Couldn't insert user " + user, e);
+            throw new DataProcessingException("Couldn't insert role " + role, e);
         } finally {
             if (session != null) {
                 session.close();
@@ -44,13 +43,12 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Role getRoleByName(String roleName) {
         try (Session session = sessionFactory.openSession()) {
-            Query<User> users =
-                    session.createQuery("FROM User u JOIN FETCH u.roles "
-                            + "WHERE u.email = :email", User.class);
-            users.setParameter("email", email);
-            return users.uniqueResultOptional();
+            Query<Role> roles = session.createQuery("FROM Role "
+                    + "WHERE roleName = :name", Role.class);
+            roles.setParameter("name", Role.of(roleName).getRoleName());
+            return roles.getSingleResult();
         }
     }
 }
