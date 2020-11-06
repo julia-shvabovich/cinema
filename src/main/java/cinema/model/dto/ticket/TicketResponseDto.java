@@ -1,8 +1,10 @@
 package cinema.model.dto.ticket;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class TicketResponseDto {
     private Long id;
     private String movieTitle;
