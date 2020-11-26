@@ -26,10 +26,9 @@ public class Initializer {
         roleService.add(userRole);
 
         User admin = new User();
-        admin.setEmail("ShvabovichJulia@gmail.com");
+        admin.setEmail("admin@gmail.com");
         admin.setPassword("12345");
-        admin.setRoles(Set.of(roleService.getRoleByName("USER"),
-                roleService.getRoleByName("ADMIN")));
+        admin.setRoles(Set.of(roleService.getRoleByName("ADMIN")));
         userService.add(admin);
 
         User user = new User();
